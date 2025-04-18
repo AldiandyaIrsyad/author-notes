@@ -7,20 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 
 	v1 "github.com/AldiandyaIrsyad/author-notes/api/v1/auth"
-	app_auth "github.com/AldiandyaIrsyad/author-notes/internal/auth" // Use alias if needed, or just auth
+	app_auth "github.com/AldiandyaIrsyad/author-notes/internal/auth"
 )
 
-// AuthHTTPHandler handles HTTP requests for authentication.
 type AuthHTTPHandler struct {
-	service app_auth.AuthService // Use the interface type
+	service app_auth.AuthService
 }
 
-// NewAuthHTTPHandler creates a new instance of AuthHTTPHandler.
-func NewAuthHTTPHandler(service app_auth.AuthService) *AuthHTTPHandler { // Accept the interface
+func NewAuthHTTPHandler(service app_auth.AuthService) *AuthHTTPHandler {
 	return &AuthHTTPHandler{service: service}
 }
 
-// RegisterRoutes registers the authentication routes with a Gin router group.
 func (h *AuthHTTPHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	authGroup := rg.Group("/auth")
 	authGroup.POST("/register", h.Register)
@@ -45,12 +42,12 @@ func (h *AuthHTTPHandler) Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body: " + err.Error()})
 		return
 	}
-	// Use the service from the handler
-	user, err := h.service.Register(c.Request.Context(), req) // Corrected: Use h.service
+
+	user, err := h.service.Register(c.Request.Context(), req)
 	if err != nil {
-		// Use errors defined in the auth domain package
-		switch { // Use switch without expression for error checking
-		case errors.Is(err, app_auth.ErrValidationFailed): // Use errors.Is for checking wrapped errors potentially
+
+		switch {
+		case errors.Is(err, app_auth.ErrValidationFailed): //
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		case errors.Is(err, app_auth.ErrUserAlreadyExists):
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
@@ -62,9 +59,8 @@ func (h *AuthHTTPHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Ensure password is not returned (already done in service, but good practice here too)
-	// user.Password = "" // Service should handle this
-	c.JSON(http.StatusCreated, user) // Return the user object from the service
+	user.Password = "" // Service should handle this
+	c.JSON(http.StatusCreated, user)
 }
 
 // Login handles the user login request.
@@ -86,11 +82,9 @@ func (h *AuthHTTPHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Use the service from the handler
-	token, err := h.service.Login(c.Request.Context(), req) // Corrected: Use h.service
+	token, err := h.service.Login(c.Request.Context(), req)
 	if err != nil {
-		// Use errors defined in the auth domain package
-		switch { // Use switch without expression for error checking
+		switch {
 		case errors.Is(err, app_auth.ErrValidationFailed):
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		case errors.Is(err, app_auth.ErrInvalidCredentials):

@@ -1,4 +1,3 @@
-// filepath: c:\Users\aldia\Documents\repositories\architecture\backend-go\cmd\app\main.go
 package main
 
 import (
@@ -9,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gin-contrib/cors" // Import the cors package
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -20,12 +19,10 @@ import (
 )
 
 func main() {
-	// Load environment variables from .env file
 	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: .env file not found or could not be loaded")
 	}
 
-	// Connect to MongoDB
 	mongoClient, err := connectToMongoDB()
 	if err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
@@ -36,20 +33,13 @@ func main() {
 		}
 	}()
 
-	// Get MongoDB database
 	dbName := getEnv("MONGO_DATABASE", "author_notes")
 	db := mongoClient.Database(dbName)
 
-	// Set up repositories
 	authRepo := auth_adapter.NewMongoAuthRepository(db)
-
-	// Set up services
 	authService := auth_service.NewAuthService(authRepo)
-
-	// Set up HTTP handlers
 	authHandler := auth_adapter.NewAuthHTTPHandler(authService)
 
-	// Set up Gin router
 	router := gin.Default()
 
 	// Use CORS middleware
@@ -60,7 +50,7 @@ func main() {
 	// config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 	// config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	// router.Use(cors.New(config))
-	router.Use(cors.Default()) // Using default for now
+	router.Use(cors.Default())
 
 	// Register API routes
 	v1 := router.Group("/v1")
@@ -75,7 +65,6 @@ func main() {
 	}
 }
 
-// connectToMongoDB establishes a connection to MongoDB using environment variables
 func connectToMongoDB() (*mongo.Client, error) {
 	uri := getEnv("MONGO_URI", "mongodb://admin:password@localhost:27017/author_notes?authSource=admin")
 
@@ -97,7 +86,6 @@ func connectToMongoDB() (*mongo.Client, error) {
 	return client, nil
 }
 
-// getEnv retrieves an environment variable or returns a default value if not set
 func getEnv(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

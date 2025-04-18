@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
-	"github.com/google/uuid" 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	app_auth "github.com/AldiandyaIrsyad/author-notes/internal/auth" 
+	app_auth "github.com/AldiandyaIrsyad/author-notes/internal/auth"
 )
 
 // mongoAuthRepository implements the AuthRepository interface using MongoDB.
@@ -25,7 +25,6 @@ func NewMongoAuthRepository(db *mongo.Database) app_auth.AuthRepository {
 
 // CreateUser inserts a new user into the database.
 func (r *mongoAuthRepository) CreateUser(ctx context.Context, user *app_auth.User) error {
-	// Generate a new UUID if the ID is empty
 	if user.ID == "" {
 		user.ID = uuid.NewString()
 	}
@@ -61,7 +60,7 @@ func (r *mongoAuthRepository) FindByEmailOrUsername(ctx context.Context, email, 
 	err := r.collection.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, app_auth.ErrUserNotFound // Use the domain error
+			return nil, app_auth.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -71,7 +70,6 @@ func (r *mongoAuthRepository) FindByEmailOrUsername(ctx context.Context, email, 
 // FindByID retrieves a user by their ID.
 func (r *mongoAuthRepository) FindByID(ctx context.Context, id string) (*app_auth.User, error) {
 	var user app_auth.User
-	// Query using the string ID directly, assuming it's stored as a string (UUID)
 	filter := bson.M{"_id": id}
 	err := r.collection.FindOne(ctx, filter).Decode(&user)
 	if err != nil {

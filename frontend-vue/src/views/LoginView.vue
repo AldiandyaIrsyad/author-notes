@@ -75,10 +75,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { authService } from "@/services/auth"; // Import the auth service
-import axios from "axios"; // Import axios to check for AxiosError
+import { authService } from "@/services/auth"; 
+import axios from "axios"; 
 
-const username = ref(""); // Keep as username, matches backend DTO
+const username = ref(""); 
 const password = ref("");
 const message = ref("");
 const messageType = ref<"success" | "error" | "">("");
@@ -112,19 +112,19 @@ const handleLogin = async () => {
     const response = await authService.login(payload);
 
     // Handle success - Store token (e.g., localStorage) and redirect
-    localStorage.setItem("authToken", response.token); // Example: Store token
+    localStorage.setItem("authToken", response.token); 
     showMessage("Login successful! Redirecting...", "success");
     isLoading.value = false;
 
     // Redirect after a short delay
     setTimeout(() => {
-      router.push("/dashboard"); // Redirect to a protected route/dashboard
+      router.push("/dashboard"); 
     }, 1500);
   } catch (error) {
     isLoading.value = false;
     console.error("Login failed:", error);
     let errorMessage = "Login failed. Please try again.";
-    // Check if it's an axios error with a response
+
     if (axios.isAxiosError(error) && error.response) {
       // Use error message from backend if available
       errorMessage = error.response.data?.error || errorMessage;

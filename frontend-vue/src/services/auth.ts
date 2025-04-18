@@ -1,21 +1,20 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/v1/auth'; // Adjust if your backend runs elsewhere
+const API_URL = 'http://localhost:8080/v1/auth'; //TODO: move to env file
 
-// Define interfaces for the request payloads based on backend DTOs
-// (Assuming backend expects email and password for login, and similar for register)
+
 interface LoginPayload {
-  username: string; // Changed from email to match backend LoginRequest DTO
+  username: string; 
   password: string;
 }
 
 interface RegisterPayload {
-  username: string; // Adjust fields based on backend v1.RegisterRequest
+  username: string; 
   email: string;
   password: string;
 }
 
-// Define interface for the expected login response
+
 interface LoginResponse {
     token: string;
 }

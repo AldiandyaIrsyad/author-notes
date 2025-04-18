@@ -19,7 +19,7 @@ const router = createRouter({
       name: 'register',
       component: RegisterView
     },
-    // Add other routes here, e.g., for a dashboard after login
+    // Template =>
     // {
     //   path: '/dashboard',
     //   name: 'dashboard',
@@ -28,6 +28,22 @@ const router = createRouter({
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import('../views/DashboardView.vue') // Example
     // }
+
+    
+    // Protected Template =>
+    // {
+    //   path: '/dashboard',
+    //   name: 'dashboard',
+    //
+    //   component: () => import('../views/DashboardView.vue'), 
+    //   beforeEnter: (to, from, next) => {
+    //     const isAuthenticated = false; // Replace with actual authentication check
+    //     if (isAuthenticated) {
+    //       next(); // Allow access to the route
+    //     } else {
+    //       next({ name: 'login' }); // Redirect to login if not authenticated
+    //     }
+    //   }
   ]
 })
 

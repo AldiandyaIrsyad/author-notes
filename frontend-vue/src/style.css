@@ -66,16 +66,4 @@ button:focus-visible {
   width: 100%;
 }
 
-/* Remove media query that might be causing confusion with color scheme */
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+/* TODO: add dark mode support */
